@@ -6,8 +6,8 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-// ValidatorV9 for gin binding
-type ValidatorV9 struct {
+// Validator for gin binding
+type Validator struct {
 	validate    *validator.Validate
 	once        sync.Once
 	ConfigFn    func(*validator.Validate)
@@ -15,18 +15,18 @@ type ValidatorV9 struct {
 }
 
 // ValidateStruct any obj
-func (v *ValidatorV9) ValidateStruct(obj interface{}) (err error) {
+func (v *Validator) ValidateStruct(obj interface{}) (err error) {
 	v.lazyinit()
 	return v.validate.Struct(obj)
 }
 
 // Engine gives validator engine
-func (v *ValidatorV9) Engine() interface{} {
+func (v *Validator) Engine() interface{} {
 	v.lazyinit()
 	return v.validate
 }
 
-func (v *ValidatorV9) lazyinit() {
+func (v *Validator) lazyinit() {
 	if !v.initialized {
 		v.initialized = true
 		v.once.Do(func() {

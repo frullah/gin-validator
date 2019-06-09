@@ -12,25 +12,25 @@ type User struct {
 }
 
 func TestEngine_engineEqualToValidator(t *testing.T) {
-	engine := ValidatorV9{}
+	engine := Validator{}
 	assert.Equal(t, engine.Engine(), engine.validate)
 }
 
 func TestValidateStruct_valid(t *testing.T) {
-	engine := ValidatorV9{}
+	engine := Validator{}
 	data := User{Name: "fajar"}
 	assert.NoError(t, engine.ValidateStruct(&data))
 }
 
 func TestValidateStruct_invalid(t *testing.T) {
-	engine := ValidatorV9{}
+	engine := Validator{}
 	data := User{Name: ""}
 	assert.Error(t, engine.ValidateStruct(&data))
 }
 
 func Test_lazyInit(t *testing.T) {
 	counter := 0
-	engine := ValidatorV9{ConfigFn: func(v *validator.Validate) { counter++ }}
+	engine := Validator{ConfigFn: func(v *validator.Validate) { counter++ }}
 	engine.lazyinit()
 	assert.True(t, engine.initialized)
 
