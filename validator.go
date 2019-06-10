@@ -1,6 +1,8 @@
 package ginvalidator
 
 import (
+	"reflect"
+	"strings"
 	"sync"
 
 	"gopkg.in/go-playground/validator.v9"
@@ -31,10 +33,24 @@ func (v *Validator) lazyinit() {
 		v.initialized = true
 		v.once.Do(func() {
 			v.validate = validator.New()
-			v.validate.SetTagName("binding")
 			if v.ConfigFn != nil {
 				v.ConfigFn(v.validate)
 			}
+
+			v.validate.SetTagName("binding")
+			v.validate.RegisterTagNameFunc(func(field reflect.StructField) string {
+				name := field.Tag.Get("json")
+				if name == "" {
+					return ""
+				}
+
+				name = name[strings.IndexByte(name, ',')+1:]
+				if name == "-" {
+					return ""
+				}
+
+				return name
+			})
 		})
 	}
 }
