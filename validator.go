@@ -44,7 +44,10 @@ func (v *Validator) lazyinit() {
 					return ""
 				}
 
-				name = name[strings.IndexByte(name, ',')+1:]
+				index := strings.IndexByte(name, ',')
+				if index != -1 {
+					name = name[:index]
+				}
 				if name == "-" {
 					return ""
 				}
