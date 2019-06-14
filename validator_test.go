@@ -11,24 +11,24 @@ type User struct {
 	Name string `json:"name" binding:"required"`
 }
 
-func TestEngine_engineEqualToValidator(t *testing.T) {
+func Test_Engine_engineEqualToValidator(t *testing.T) {
 	engine := Validator{}
 	require.Equal(t, engine.Engine(), engine.validate)
 }
 
-func TestValidateStruct_valid(t *testing.T) {
+func Test_ValidateStruct_valid(t *testing.T) {
 	engine := Validator{}
 	data := User{Name: "fajar"}
 	require.NoError(t, engine.ValidateStruct(&data))
 }
 
-func TestValidateStruct_invalid(t *testing.T) {
+func Test_ValidateStruct_invalid(t *testing.T) {
 	engine := Validator{}
 	data := User{Name: ""}
 	require.Error(t, engine.ValidateStruct(&data))
 }
 
-func TestValidateStruct_jsonTag(t *testing.T) {
+func Test_ValidateStruct_jsonTag(t *testing.T) {
 	engine := Validator{}
 	data := User{Name: ""}
 	err := engine.ValidateStruct(&data)
@@ -36,7 +36,7 @@ func TestValidateStruct_jsonTag(t *testing.T) {
 	errors := err.(validator.ValidationErrors)
 	require.Equal(t, errors[0].Field(), "name")
 }
-func TestValidateStruct_emptyJsonTag(t *testing.T) {
+func Test_ValidateStruct_emptyJsonTag(t *testing.T) {
 	engine := Validator{}
 	data := struct {
 		Name string `binding:"required"`
@@ -46,7 +46,8 @@ func TestValidateStruct_emptyJsonTag(t *testing.T) {
 	errors := err.(validator.ValidationErrors)
 	require.Equal(t, errors[0].Field(), "Name")
 }
-func TestValidateStruct_dashJsonName(t *testing.T) {
+
+func Test_ValidateStruct_dashJsonName(t *testing.T) {
 	engine := Validator{}
 	data := struct {
 		Name string `json:"-" binding:"required"`
