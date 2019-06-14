@@ -46,7 +46,16 @@ func Test_ValidateStruct_emptyJsonTag(t *testing.T) {
 	errors := err.(validator.ValidationErrors)
 	require.Equal(t, errors[0].Field(), "Name")
 }
-
+func Test_ValidateStruct_multipleJSONTagParam(t *testing.T) {
+	engine := Validator{}
+	data := struct {
+		Field string `json:"name,omitempty" binding:"required"`
+	}{Field: ""}
+	err := engine.ValidateStruct(&data)
+	require.Error(t, err)
+	errors := err.(validator.ValidationErrors)
+	require.Equal(t, errors[0].Field(), "name")
+}
 func Test_ValidateStruct_dashJsonName(t *testing.T) {
 	engine := Validator{}
 	data := struct {
